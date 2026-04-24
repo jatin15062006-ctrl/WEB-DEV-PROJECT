@@ -17,7 +17,7 @@ USER (Browser)
      |
      | opens index.html or add-expense.html
      ↓
-FRONTEND  (HTML + CSS + Vanilla JS)
+FRONTEND  (HTML + CSS + JS)
      |
      | fetch("http://localhost:5000/expenses")
      | GET / POST / PUT / DELETE

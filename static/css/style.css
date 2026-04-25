@@ -1,0 +1,268 @@
+/* ── Reset & Base ─────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --black:  #0d0d0d;
+  --white:  #f5f5f5;
+  --gray:   #888;
+  --light:  #e8e8e8;
+  --border: #d0d0d0;
+  --radius: 10px;
+  --shadow: 0 2px 12px rgba(0,0,0,0.08);
+  --trans:  0.25s ease;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: var(--white);
+  color: var(--black);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* ── Navbar ───────────────────────────────────────────────────── */
+.navbar {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 2rem;
+  height: 58px;
+  background: var(--black);
+  color: var(--white);
+}
+
+.nav-brand {
+  font-size: 1.1rem; font-weight: 700; letter-spacing: .5px;
+  display: flex; align-items: center; gap: .5rem;
+}
+
+.nav-links {
+  display: flex; gap: 1.8rem; list-style: none;
+}
+.nav-links a {
+  color: #ccc; text-decoration: none; font-size: .9rem;
+  transition: color var(--trans);
+}
+.nav-links a:hover { color: var(--white); }
+
+.nav-toggle {
+  display: none;
+  background: none; border: none; color: var(--white);
+  cursor: pointer; padding: 4px; line-height: 0;
+}
+
+/* ── Toast ────────────────────────────────────────────────────── */
+.toast {
+  position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 999;
+  padding: .7rem 1.3rem;
+  border-radius: var(--radius);
+  font-size: .88rem; font-weight: 500;
+  opacity: 0; pointer-events: none;
+  transform: translateY(10px);
+  transition: opacity .3s, transform .3s;
+}
+.toast.show { opacity: 1; pointer-events: auto; transform: translateY(0); }
+.toast.success { background: var(--black); color: var(--white); }
+.toast.error   { background: #c0392b;      color: var(--white); }
+
+/* ── Container ────────────────────────────────────────────────── */
+.container { max-width: 900px; margin: 0 auto; padding: 2rem 1.2rem 3rem; }
+
+/* ── Section ──────────────────────────────────────────────────── */
+.section { margin-bottom: 3rem; }
+.section-title {
+  font-size: 1.25rem; font-weight: 700;
+  margin-bottom: 1.2rem;
+  padding-bottom: .4rem;
+  border-bottom: 2px solid var(--black);
+}
+
+/* ── Fade-in animation ────────────────────────────────────────── */
+.fade-in { animation: fadeUp .5s ease both; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Dashboard Cards ──────────────────────────────────────────── */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.8rem;
+}
+
+.card {
+  background: var(--black); color: var(--white);
+  border-radius: var(--radius);
+  padding: 1.3rem 1.5rem;
+  display: flex; flex-direction: column; gap: .3rem;
+  box-shadow: var(--shadow);
+  transition: transform var(--trans), box-shadow var(--trans);
+}
+.card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
+
+.card-label { font-size: .78rem; color: #aaa; text-transform: uppercase; letter-spacing: .8px; }
+.card-value { font-size: 1.6rem; font-weight: 700; }
+
+/* ── Chart ────────────────────────────────────────────────────── */
+.chart-box {
+  background: #fff; border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 1.5rem;
+  box-shadow: var(--shadow);
+}
+.chart-title { font-size: .95rem; font-weight: 600; margin-bottom: 1rem; color: var(--gray); }
+#categoryChart { max-height: 260px; }
+
+/* ── Form ─────────────────────────────────────────────────────── */
+.expense-form {
+  background: #fff; border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 1.8rem;
+  box-shadow: var(--shadow);
+}
+
+.form-group { display: flex; flex-direction: column; gap: .35rem; margin-bottom: 1rem; }
+.form-row   { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+label { font-size: .82rem; font-weight: 600; color: #444; }
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select {
+  padding: .6rem .85rem;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  font-size: .92rem;
+  background: var(--white);
+  color: var(--black);
+  transition: border-color var(--trans), box-shadow var(--trans);
+  outline: none;
+}
+input:focus, select:focus {
+  border-color: var(--black);
+  box-shadow: 0 0 0 3px rgba(0,0,0,0.07);
+}
+
+.err { font-size: .78rem; color: #c0392b; min-height: 1rem; }
+
+.form-actions { display: flex; gap: .8rem; margin-top: .5rem; }
+
+/* ── Buttons ──────────────────────────────────────────────────── */
+.btn {
+  padding: .6rem 1.4rem;
+  border: none; border-radius: 7px;
+  font-size: .9rem; font-weight: 600;
+  cursor: pointer;
+  display: inline-flex; align-items: center; gap: .4rem;
+  transition: background var(--trans), transform var(--trans), box-shadow var(--trans);
+}
+.btn:active { transform: scale(.97); }
+
+.btn-primary { background: var(--black); color: var(--white); }
+.btn-primary:hover { background: #333; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+
+.btn-ghost {
+  background: transparent; color: var(--black);
+  border: 1.5px solid var(--border);
+}
+.btn-ghost:hover { background: var(--light); }
+
+.btn-sm { padding: .3rem .75rem; font-size: .8rem; border-radius: 6px; }
+.btn-edit   { background: var(--black); color: var(--white); }
+.btn-edit:hover { background: #333; }
+.btn-delete { background: transparent; color: #c0392b; border: 1.5px solid #c0392b; }
+.btn-delete:hover { background: #c0392b; color: #fff; }
+
+/* ── Controls ─────────────────────────────────────────────────── */
+.controls {
+  display: flex; flex-wrap: wrap; gap: .7rem;
+  margin-bottom: 1rem;
+}
+
+/* Search with icon */
+.search-wrapper {
+  position: relative; flex: 1; min-width: 180px;
+}
+.search-icon {
+  position: absolute; left: .75rem; top: 50%;
+  transform: translateY(-50%);
+  color: var(--gray); pointer-events: none;
+}
+.search-wrapper .search-input { width: 100%; padding-left: 2.2rem; }
+
+.filter-select { min-width: 130px; }
+
+/* ── Table ────────────────────────────────────────────────────── */
+.table-wrapper {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.expense-table {
+  width: 100%; border-collapse: collapse;
+  background: #fff;
+}
+.expense-table th {
+  background: var(--black); color: var(--white);
+  padding: .75rem 1rem; text-align: left;
+  font-size: .82rem; text-transform: uppercase; letter-spacing: .6px;
+}
+.expense-table td {
+  padding: .75rem 1rem;
+  border-bottom: 1px solid var(--light);
+  font-size: .9rem;
+  vertical-align: middle;
+}
+.expense-table tbody tr { transition: background var(--trans); animation: rowIn .3s ease both; }
+.expense-table tbody tr:hover { background: #fafafa; }
+.expense-table tbody tr:last-child td { border-bottom: none; }
+
+@keyframes rowIn {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.badge {
+  display: inline-block;
+  padding: .2rem .65rem;
+  border-radius: 20px;
+  font-size: .75rem; font-weight: 600;
+  background: var(--light); color: var(--black);
+  border: 1px solid var(--border);
+}
+
+.actions-cell { display: flex; gap: .5rem; }
+
+.empty-msg {
+  text-align: center; padding: 2rem;
+  color: var(--gray); font-size: .9rem;
+}
+
+/* ── Footer ───────────────────────────────────────────────────── */
+.footer {
+  text-align: center;
+  padding: 1.2rem;
+  font-size: .82rem;
+  color: var(--gray);
+  border-top: 1px solid var(--border);
+}
+
+/* ── Responsive ───────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .nav-links {
+    display: none; flex-direction: column;
+    position: absolute; top: 58px; left: 0; right: 0;
+    background: var(--black); padding: 1rem 2rem; gap: 1rem;
+  }
+  .nav-links.open { display: flex; }
+  .nav-toggle { display: block; }
+
+  .form-row { grid-template-columns: 1fr; }
+  .cards-grid { grid-template-columns: 1fr 1fr; }
+  .controls { flex-direction: column; }
+  .search-wrapper, .filter-select { width: 100%; }
+}

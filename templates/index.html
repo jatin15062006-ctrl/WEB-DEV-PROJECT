@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Expense Tracker</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- ── Navbar ── -->
+  <nav class="navbar">
+    <div class="nav-brand">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="5" width="20" height="14" rx="2"/>
+        <line x1="2" y1="10" x2="22" y2="10"/>
+      </svg>
+      ExpenseTracker
+    </div>
+    <button class="nav-toggle" id="navToggle">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#dashboard">Dashboard</a></li>
+      <li><a href="#expenses">Expenses</a></li>
+      <li><a href="#add-section">Add New</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── Toast ── -->
+  <div class="toast" id="toast"></div>
+
+  <main class="container">
+
+    <!-- ── Dashboard Cards ── -->
+    <section id="dashboard" class="section fade-in">
+      <h2 class="section-title">Dashboard</h2>
+      <div class="cards-grid">
+        <div class="card">
+          <span class="card-label">Total Spent</span>
+          <span class="card-value" id="totalSpent">Rs.0.00</span>
+        </div>
+        <div class="card">
+          <span class="card-label">This Month</span>
+          <span class="card-value" id="monthlySpent">Rs.0.00</span>
+        </div>
+        <div class="card">
+          <span class="card-label">Transactions</span>
+          <span class="card-value" id="txnCount">0</span>
+        </div>
+      </div>
+
+      <!-- Chart -->
+      <div class="chart-box">
+        <h3 class="chart-title">Spending by Category</h3>
+        <canvas id="categoryChart"></canvas>
+      </div>
+    </section>
+
+    <!-- ── Add / Edit Form ── -->
+    <section id="add-section" class="section fade-in">
+      <h2 class="section-title" id="formTitle">Add Expense</h2>
+      <form id="expenseForm" class="expense-form" novalidate>
+        <input type="hidden" id="editId" />
+
+        <div class="form-group">
+          <label for="title">Title</label>
+          <input type="text" id="title" placeholder="e.g. Lunch at canteen" maxlength="80" />
+          <span class="err" id="titleErr"></span>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="amount">Amount (Rs.)</label>
+            <input type="number" id="amount" placeholder="0.00" min="0.01" step="0.01" />
+            <span class="err" id="amountErr"></span>
+          </div>
+          <div class="form-group">
+            <label for="date">Date</label>
+            <input type="date" id="date" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="category">Category</label>
+          <select id="category">
+            <option value="">-- Select --</option>
+            <option value="Food">Food</option>
+            <option value="Travel">Travel</option>
+            <option value="Shopping">Shopping</option>
+            <option value="Bills">Bills</option>
+            <option value="Health">Health</option>
+            <option value="Other">Other</option>
+          </select>
+          <span class="err" id="categoryErr"></span>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="submitBtn">Add Expense</button>
+          <button type="button" class="btn btn-ghost" id="cancelEdit" style="display:none">Cancel</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- ── Expenses List ── -->
+    <section id="expenses" class="section fade-in">
+      <h2 class="section-title">All Expenses</h2>
+
+      <!-- Controls -->
+      <div class="controls">
+        <div class="search-wrapper">
+          <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input type="text" id="searchInput" placeholder="Search expenses..." class="search-input" />
+        </div>
+
+        <select id="filterCategory" class="filter-select">
+          <option value="">All Categories</option>
+          <option value="Food">Food</option>
+          <option value="Travel">Travel</option>
+          <option value="Shopping">Shopping</option>
+          <option value="Bills">Bills</option>
+          <option value="Health">Health</option>
+          <option value="Other">Other</option>
+        </select>
+
+        <select id="sortBy" class="filter-select">
+          <option value="date">Sort: Date</option>
+          <option value="amount">Sort: Amount</option>
+        </select>
+
+        <select id="sortOrder" class="filter-select">
+          <option value="desc">Newest First</option>
+          <option value="asc">Oldest First</option>
+        </select>
+      </div>
+
+      <!-- Table -->
+      <div class="table-wrapper">
+        <table class="expense-table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Category</th>
+              <th>Date</th>
+              <th>Amount</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="expenseTableBody"></tbody>
+        </table>
+        <p class="empty-msg" id="emptyMsg" style="display:none">No expenses found.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── Footer ── -->
+  <footer class="footer">
+    <p>Built by <strong>Your Name</strong> &nbsp;&mdash;&nbsp; Expense Tracker &copy; 2025</p>
+  </footer>
+
+  <script src="/static/js/script.js"></script>
+</body>
+</html>

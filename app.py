@@ -16,7 +16,7 @@ login_manager = LoginManager(app)
 login_manager.login_view = "login_page"
 
 
-# ── DB ─────────────────────────────────────────────────────────────────────────
+
 
 def get_db():
     return psycopg2.connect(os.getenv("DATABASE_URL"), cursor_factory=RealDictCursor, sslmode="require")
@@ -49,7 +49,7 @@ with app.app_context():
     init_db()
 
 
-# ── Auth helpers ───────────────────────────────────────────────────────────────
+
 
 class User(UserMixin):
     def __init__(self, id, username):
@@ -65,7 +65,7 @@ def load_user(user_id):
     return User(row["id"], row["username"]) if row else None
 
 
-# ── Auth routes ────────────────────────────────────────────────────────────────
+
 
 @app.route("/")
 @login_required
@@ -126,7 +126,7 @@ def logout():
     return redirect(url_for("login_page"))
 
 
-# ── Expenses API ───────────────────────────────────────────────────────────────
+
 
 @app.route("/api/expenses", methods=["GET", "POST"])
 @login_required

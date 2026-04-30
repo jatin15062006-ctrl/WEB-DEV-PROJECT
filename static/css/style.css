@@ -1,4 +1,4 @@
-/* ── Reset & Base ─────────────────────────────────────────────── */
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
@@ -22,7 +22,7 @@ body {
   line-height: 1.6;
 }
 
-/* ── Navbar ───────────────────────────────────────────────────── */
+
 .navbar {
   position: sticky; top: 0; z-index: 100;
   display: flex; align-items: center; justify-content: space-between;
@@ -52,7 +52,7 @@ body {
   cursor: pointer; padding: 4px; line-height: 0;
 }
 
-/* ── Toast ────────────────────────────────────────────────────── */
+
 .toast {
   position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 999;
   padding: .7rem 1.3rem;
@@ -66,10 +66,10 @@ body {
 .toast.success { background: var(--black); color: var(--white); }
 .toast.error   { background: #c0392b;      color: var(--white); }
 
-/* ── Container ────────────────────────────────────────────────── */
+
 .container { max-width: 900px; margin: 0 auto; padding: 2rem 1.2rem 3rem; }
 
-/* ── Section ──────────────────────────────────────────────────── */
+
 .section { margin-bottom: 3rem; }
 .section-title {
   font-size: 1.25rem; font-weight: 700;
@@ -78,14 +78,14 @@ body {
   border-bottom: 2px solid var(--black);
 }
 
-/* ── Fade-in animation ────────────────────────────────────────── */
+
 .fade-in { animation: fadeUp .5s ease both; }
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(18px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── Dashboard Cards ──────────────────────────────────────────── */
+
 .cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -106,7 +106,7 @@ body {
 .card-label { font-size: .78rem; color: #aaa; text-transform: uppercase; letter-spacing: .8px; }
 .card-value { font-size: 1.6rem; font-weight: 700; }
 
-/* ── Chart ────────────────────────────────────────────────────── */
+
 .chart-box {
   background: #fff; border: 1px solid var(--border);
   border-radius: var(--radius); padding: 1.5rem;
@@ -115,7 +115,7 @@ body {
 .chart-title { font-size: .95rem; font-weight: 600; margin-bottom: 1rem; color: var(--gray); }
 #categoryChart { max-height: 260px; }
 
-/* ── Form ─────────────────────────────────────────────────────── */
+
 .expense-form {
   background: #fff; border: 1px solid var(--border);
   border-radius: var(--radius); padding: 1.8rem;
@@ -149,7 +149,7 @@ input:focus, select:focus {
 
 .form-actions { display: flex; gap: .8rem; margin-top: .5rem; }
 
-/* ── Buttons ──────────────────────────────────────────────────── */
+
 .btn {
   padding: .6rem 1.4rem;
   border: none; border-radius: 7px;
@@ -175,13 +175,13 @@ input:focus, select:focus {
 .btn-delete { background: transparent; color: #c0392b; border: 1.5px solid #c0392b; }
 .btn-delete:hover { background: #c0392b; color: #fff; }
 
-/* ── Controls ─────────────────────────────────────────────────── */
+
 .controls {
   display: flex; flex-wrap: wrap; gap: .7rem;
   margin-bottom: 1rem;
 }
 
-/* Search with icon */
+
 .search-wrapper {
   position: relative; flex: 1; min-width: 180px;
 }
@@ -194,7 +194,7 @@ input:focus, select:focus {
 
 .filter-select { min-width: 130px; }
 
-/* ── Table ────────────────────────────────────────────────────── */
+
 .table-wrapper {
   overflow-x: auto;
   border: 1px solid var(--border);

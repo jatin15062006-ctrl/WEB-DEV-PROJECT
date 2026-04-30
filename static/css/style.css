@@ -266,3 +266,51 @@ input:focus, select:focus {
   .controls { flex-direction: column; }
   .search-wrapper, .filter-select { width: 100%; }
 }
+
+/* ── Auth pages ───────────────────────────────────────────────── */
+.auth-body {
+  display: flex; align-items: center; justify-content: center;
+  min-height: 100vh; background: var(--white);
+}
+
+.auth-card {
+  width: 100%; max-width: 380px;
+  background: #fff; border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 2.2rem 2rem;
+  box-shadow: var(--shadow);
+}
+
+.auth-brand {
+  display: flex; align-items: center; gap: .5rem;
+  font-size: 1.1rem; font-weight: 700; margin-bottom: 1.4rem;
+}
+
+.auth-title {
+  font-size: 1.2rem; font-weight: 700; margin-bottom: 1.2rem;
+}
+
+.auth-err {
+  min-height: 1.2rem; margin-bottom: .8rem;
+  font-size: .85rem; color: #c0392b;
+}
+
+.btn-full { width: 100%; justify-content: center; margin-top: .4rem; }
+
+.auth-switch {
+  text-align: center; margin-top: 1.2rem;
+  font-size: .85rem; color: var(--gray);
+}
+.auth-switch a { color: var(--black); font-weight: 600; text-decoration: none; }
+.auth-switch a:hover { text-decoration: underline; }
+
+/* ── Nav user / logout ────────────────────────────────────────── */
+.nav-user {
+  font-size: .85rem; color: #aaa; list-style: none;
+  display: flex; align-items: center;
+}
+
+.nav-logout {
+  font-size: .85rem !important;
+  color: #ff6b6b !important;
+}
+.nav-logout:hover { color: #fff !important; }

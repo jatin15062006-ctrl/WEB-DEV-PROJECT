@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login – ExpenseTracker</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body class="auth-body">
+  <div class="auth-card">
+    <div class="auth-brand">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>
+      </svg>
+      ExpenseTracker
+    </div>
+    <h2 class="auth-title">Welcome back</h2>
+
+    <div class="err auth-err" id="authErr"></div>
+
+    <form id="authForm" novalidate>
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" placeholder="your username" autocomplete="username" />
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="••••••" autocomplete="current-password" />
+      </div>
+      <button type="submit" class="btn btn-primary btn-full">Log In</button>
+    </form>
+
+    <p class="auth-switch">Don't have an account? <a href="/signup">Sign up</a></p>
+  </div>
+
+  <script>
+    document.getElementById("authForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const err = document.getElementById("authErr");
+      err.textContent = "";
+      const res = await fetch("/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: document.getElementById("username").value.trim(),
+          password: document.getElementById("password").value
+        })
+      });
+      if (res.ok) { window.location.href = "/"; }
+      else { const d = await res.json(); err.textContent = d.error; }
+    });
+  </script>
+</body>
+</html>

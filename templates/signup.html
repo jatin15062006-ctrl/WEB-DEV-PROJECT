@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up – ExpenseTracker</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body class="auth-body">
+  <div class="auth-card">
+    <div class="auth-brand">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>
+      </svg>
+      ExpenseTracker
+    </div>
+    <h2 class="auth-title">Create account</h2>
+
+    <div class="err auth-err" id="authErr"></div>
+
+    <form id="authForm" novalidate>
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" placeholder="choose a username" autocomplete="username" />
+      </div>
+      <div class="form-group">
+        <label for="password">Password <span style="font-weight:400;color:#888">(min 6 chars)</span></label>
+        <input type="password" id="password" placeholder="••••••" autocomplete="new-password" />
+      </div>
+      <button type="submit" class="btn btn-primary btn-full">Create Account</button>
+    </form>
+
+    <p class="auth-switch">Already have an account? <a href="/login">Log in</a></p>
+  </div>
+
+  <script>
+    document.getElementById("authForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const err = document.getElementById("authErr");
+      err.textContent = "";
+      const res = await fetch("/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: document.getElementById("username").value.trim(),
+          password: document.getElementById("password").value
+        })
+      });
+      if (res.ok) { window.location.href = "/"; }
+      else { const d = await res.json(); err.textContent = d.error; }
+    });
+  </script>
+</body>
+</html>

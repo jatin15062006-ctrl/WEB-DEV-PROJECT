@@ -23,7 +23,8 @@ def get_db():
 
 
 def init_db():
-    conn = get_db(); cur = conn.cursor()
+    conn = get_db()
+    cur  = conn.cursor()
     cur.execute("""
         CREATE TABLE IF NOT EXISTS users (
             id       SERIAL PRIMARY KEY,
@@ -42,7 +43,9 @@ def init_db():
             created_at TIMESTAMPTZ DEFAULT NOW()
         )
     """)
-    conn.commit(); cur.close(); conn.close()
+    conn.commit()
+    cur.close()
+    conn.close()
 
 
 with app.app_context():
@@ -59,9 +62,12 @@ class User(UserMixin):
 
 @login_manager.user_loader
 def load_user(user_id):
-    conn = get_db(); cur = conn.cursor()
+    conn = get_db()
+    cur  = conn.cursor()
     cur.execute("SELECT id, username FROM users WHERE id = %s", (user_id,))
-    row = cur.fetchone(); cur.close(); conn.close()
+    row = cur.fetchone()
+    cur.close()
+    conn.close()
     return User(row["id"], row["username"]) if row else None
 
 
@@ -79,9 +85,12 @@ def login_page():
         return redirect(url_for("index"))
     if request.method == "POST":
         data = request.get_json()
-        conn = get_db(); cur = conn.cursor()
+        conn = get_db()
+        cur  = conn.cursor()
         cur.execute("SELECT id, username, password FROM users WHERE username = %s", (data["username"],))
-        row = cur.fetchone(); cur.close(); conn.close()
+        row = cur.fetchone()
+        cur.close()
+        conn.close()
         if row and check_password_hash(row["password"], data["password"]):
             login_user(User(row["id"], row["username"]))
             return jsonify({"ok": True})
@@ -94,14 +103,15 @@ def signup_page():
     if current_user.is_authenticated:
         return redirect(url_for("index"))
     if request.method == "POST":
-        data = request.get_json()
+        data     = request.get_json()
         username = data.get("username", "").strip()
         password = data.get("password", "")
         if not username or not password:
             return jsonify({"error": "Username and password required"}), 400
         if len(password) < 6:
             return jsonify({"error": "Password must be at least 6 characters"}), 400
-        conn = get_db(); cur = conn.cursor()
+        conn = get_db()
+        cur  = conn.cursor()
         try:
             cur.execute(
                 "INSERT INTO users (username, password) VALUES (%s, %s) RETURNING id",
@@ -115,7 +125,8 @@ def signup_page():
             conn.rollback()
             return jsonify({"error": "Username already taken"}), 409
         finally:
-            cur.close(); conn.close()
+            cur.close()
+            conn.close()
     return render_template("signup.html")
 
 
@@ -131,8 +142,9 @@ def logout():
 @app.route("/api/expenses", methods=["GET", "POST"])
 @login_required
 def expenses():
-    conn = get_db(); cur = conn.cursor()
-    uid = current_user.id
+    conn = get_db()
+    cur  = conn.cursor()
+    uid  = current_user.id
 
     if request.method == "GET":
         category = request.args.get("category", "")
@@ -149,13 +161,17 @@ def expenses():
         params = [uid]
 
         if category:
-            query += " AND category = %s"; params.append(category)
+            query += " AND category = %s"
+            params.append(category)
         if search:
-            query += " AND title ILIKE %s"; params.append(f"%{search}%")
+            query += " AND title ILIKE %s"
+            params.append(f"%{search}%")
 
         query += f" ORDER BY {sort_by} {order}"
         cur.execute(query, params)
-        rows = cur.fetchall(); cur.close(); conn.close()
+        rows = cur.fetchall()
+        cur.close()
+        conn.close()
         return jsonify([dict(r) for r in rows])
 
     if request.method == "POST":
@@ -164,7 +180,8 @@ def expenses():
             return jsonify({"error": "title, amount and category are required"}), 400
         try:
             amount = float(data["amount"])
-            if amount <= 0: raise ValueError
+            if amount <= 0:
+                raise ValueError
         except (ValueError, TypeError):
             return jsonify({"error": "amount must be a positive number"}), 400
 
@@ -173,19 +190,25 @@ def expenses():
             "INSERT INTO expenses (user_id, title, amount, category, date) VALUES (%s,%s,%s,%s,%s) RETURNING *",
             (uid, data["title"].strip(), amount, data["category"], date)
         )
-        new_row = cur.fetchone(); conn.commit(); cur.close(); conn.close()
+        new_row = cur.fetchone()
+        conn.commit()
+        cur.close()
+        conn.close()
         return jsonify(dict(new_row)), 201
 
 
 @app.route("/api/expenses/<int:expense_id>", methods=["GET", "PUT", "DELETE"])
 @login_required
 def expense_detail(expense_id):
-    conn = get_db(); cur = conn.cursor()
-    uid = current_user.id
+    conn = get_db()
+    cur  = conn.cursor()
+    uid  = current_user.id
 
     if request.method == "GET":
         cur.execute("SELECT * FROM expenses WHERE id = %s AND user_id = %s", (expense_id, uid))
-        row = cur.fetchone(); cur.close(); conn.close()
+        row = cur.fetchone()
+        cur.close()
+        conn.close()
         return jsonify(dict(row)) if row else (jsonify({"error": "Not found"}), 404)
 
     if request.method == "PUT":
@@ -194,7 +217,8 @@ def expense_detail(expense_id):
             return jsonify({"error": "title, amount and category are required"}), 400
         try:
             amount = float(data["amount"])
-            if amount <= 0: raise ValueError
+            if amount <= 0:
+                raise ValueError
         except (ValueError, TypeError):
             return jsonify({"error": "amount must be a positive number"}), 400
 
@@ -203,20 +227,27 @@ def expense_detail(expense_id):
             "UPDATE expenses SET title=%s, amount=%s, category=%s, date=%s WHERE id=%s AND user_id=%s RETURNING *",
             (data["title"].strip(), amount, data["category"], date, expense_id, uid)
         )
-        updated = cur.fetchone(); conn.commit(); cur.close(); conn.close()
+        updated = cur.fetchone()
+        conn.commit()
+        cur.close()
+        conn.close()
         return jsonify(dict(updated)) if updated else (jsonify({"error": "Not found"}), 404)
 
     if request.method == "DELETE":
         cur.execute("DELETE FROM expenses WHERE id = %s AND user_id = %s RETURNING id", (expense_id, uid))
-        deleted = cur.fetchone(); conn.commit(); cur.close(); conn.close()
+        deleted = cur.fetchone()
+        conn.commit()
+        cur.close()
+        conn.close()
         return jsonify({"message": "Deleted"}) if deleted else (jsonify({"error": "Not found"}), 404)
 
 
 @app.route("/api/stats")
 @login_required
 def stats():
-    conn = get_db(); cur = conn.cursor()
-    uid = current_user.id
+    conn = get_db()
+    cur  = conn.cursor()
+    uid  = current_user.id
 
     cur.execute("SELECT COALESCE(SUM(amount),0) AS total FROM expenses WHERE user_id=%s", (uid,))
     total = float(cur.fetchone()["total"])
@@ -236,9 +267,10 @@ def stats():
     cur.execute("SELECT COUNT(*) AS cnt FROM expenses WHERE user_id=%s", (uid,))
     count = int(cur.fetchone()["cnt"])
 
-    cur.close(); conn.close()
+    cur.close()
+    conn.close()
     return jsonify({"total": total, "monthly": monthly, "by_category": by_category, "count": count})
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=5001)
